@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-   return view('admin.layouts.layout');
+   return view('admin.home.index');
 });
+
+Route::group(['prefix' => 'categories', 'name' => 'categories.'], function () {
+    Route::post('change-status', [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
+});
+Route::resource('categories', CategoryController::class);
