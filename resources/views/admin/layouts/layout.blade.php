@@ -15,6 +15,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     @stack('link-styles')
     @stack('custom-styles')
     <style>
@@ -78,15 +81,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('adminLTE/dist/js/adminlte.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 @stack('link-scripts')
 <script>
-    $(document).ajaxStop(function () {
-        $('#loading').hide();
-    });
-
-    $(document).ajaxStart(function () {
-        $('#loading').show();
-    });
+    toastr.options.closeButton = true;
+    toastr.options.showEasing = 'linear';
+    toastr.options.progressBar = true;
 </script>
 @stack('custom-scripts')
 </body>

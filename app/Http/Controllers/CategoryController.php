@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use function PHPUnit\Framework\isEmpty;
 
 class CategoryController extends Controller
 {
@@ -70,7 +71,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $parentCate = Category::where('parent_id', '=', 0)->get();
+        $category = Category::where('id', $id)->first();
+
+        return view('admin.category.edit', ['parentCategories' => $parentCate, 'category' => $category]);
     }
 
     /**
@@ -82,7 +86,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::where('id', $id)->first();
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'parent_id' => $request->parent_id,
+            'status' => $request->status ? 1 : 0,
+        ]);
+
+        return redirect()->back()->with('success', 'Update Category Success!');
     }
 
     /**
@@ -93,7 +106,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::where('id', $id)->delete();
+
+        return redirect()->route('categories.index')->with('success', 'Delete category successfully!');
     }
 
     public function changeStatus(Request $request)
