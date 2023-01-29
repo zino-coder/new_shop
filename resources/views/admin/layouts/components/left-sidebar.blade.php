@@ -34,17 +34,38 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                <li class="nav-item menu-open">
+                <li class="nav-item">
                     <a href="{{ route('categories.index') }}" class="nav-link {{ Route::is('categories.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cubes"></i>
                         <p>Categories</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('categories.index') }}" class="nav-link">
+                <li class="nav-item {{ Route::is('products.*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('products.index') }}" class="nav-link {{ Route::is('products.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-seedling"></i>
-                        <p>Categories</p>
+                        <p>Products</p>
+                        <i class="fas fa-angle-left right"></i>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('products.index') }}" class="nav-link {{ Route::is('products.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-server"></i>
+                                <p>All Products</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('products.create') }}" class="nav-link {{ Route::is('products.create') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-puzzle-piece"></i>
+                                <p>Add Product</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tags"></i>
+                                <p>Tags</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>

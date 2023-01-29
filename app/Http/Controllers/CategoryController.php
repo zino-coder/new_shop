@@ -95,7 +95,7 @@ class CategoryController extends Controller
             'status' => $request->status ? 1 : 0,
         ]);
 
-        return redirect()->back()->with('success', 'Update Category Success!');
+        return redirect()->route('categories.index')->with('success', 'Update Category Success!');
     }
 
     /**

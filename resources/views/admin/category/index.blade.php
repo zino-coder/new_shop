@@ -79,6 +79,17 @@
 @endpush
 
 @push('custom-scripts')
+    @if(Session::has('success'))
+        <script>
+            $(document).ready(function () {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Update status',
+                    html: '{{ Session::get('success') }}',
+                })
+            })
+        </script>
+    @endif
     <script>
         //Initialize Select2 Elements
         $('.select2bs4').select2({
@@ -98,7 +109,11 @@
                 dataType: "json",
                 success:function(data){
                     console.log(data)
-                    toastr.success('Change status for ' + data.name + ' successfully!', 'Update')
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Update status',
+                        html: `Update status for ${data.status} successfully!`,
+                    })
                 }
             })
         })
