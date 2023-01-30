@@ -19,6 +19,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
     <!-- dropzonejs -->
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/dropzone/min/dropzone.min.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
     @stack('link-styles')
     @stack('custom-styles')
@@ -87,6 +92,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('adminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- dropzonejs -->
 <script src="{{ asset('adminLTE/plugins/dropzone/min/dropzone.min.js') }}"></script>
+<!-- bs-custom-file-input -->
+<script src="{{ asset('adminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<!-- Select2 -->
+<script src="{{ asset('adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- CKEditor -->
+<script src="{{ asset('lib/ckeditor5/ckeditor.js')}}"></script>
+<!-- TinyMCE -->
+<script src="{{ asset('lib/tinymce/tinymce.min.js') }}"></script>
 
 @stack('link-scripts')
 <script>
@@ -102,6 +115,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+
+    @if(Session::has('success'))
+    $(document).ready(function () {
+        Toast.fire({
+            icon: 'success',
+            title: 'Update status',
+            html: '{{ Session::get('success') }}',
+        })
+    })
+    @endif
 </script>
 @stack('custom-scripts')
 </body>

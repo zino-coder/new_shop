@@ -9,6 +9,21 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'category_id',
+        'brand_id',
+        'amount',
+        'regular_price',
+        'sale_price',
+        'is_featured',
+        'is_hot',
+        'view_count',
+        'description',
+        'content',
+        'status',
+    ];
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -16,11 +31,11 @@ class Product extends Model
 
     public function featureImage()
     {
-        return $this->morphMany(Media::class, 'mediable')->where('type', 'featured');
+        return $this->morphOne(Media::class, 'mediable')->where('type', 'featured');
     }
 
-    public function thumbImage()
+    public function thumbImages()
     {
-        return $this->morphOne(Media::class, 'mediable')->where('type', 'thumb');
+        return $this->morphMany(Media::class, 'mediable')->where('type', 'thumb');
     }
 }

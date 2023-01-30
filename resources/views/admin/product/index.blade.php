@@ -60,10 +60,10 @@
                                                 </td>
                                                 <td>{{ $product->view_count }}</td>
                                                 <td class="text-center">
-                                                    <a class="d-inline-block btn btn-primary" href="{{ route('categories.edit', $product->id)}}">
+                                                    <a class="d-inline-block btn btn-primary" href="{{ route('products.edit', $product->id)}}">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-danger btn-modal" data-toggle="modal" data-target="#deleteModal" data-browse="{{ route('categories.destroy', $product->id) }}">
+                                                    <button type="button" class="btn btn-danger btn-modal" data-toggle="modal" data-target="#deleteModal" data-browse="{{ route('products.destroy', $product->id) }}">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
