@@ -22,3 +22,6 @@ Route::group(['prefix' => 'categories', 'name' => 'categories.'], function () {
     Route::post('change-status', [CategoryController::class, 'changeStatus'])->name('categories.changeStatus');
 });
 Route::resource('categories', CategoryController::class);
+
+Route::post('dropzone', [CategoryController::class, 'dropzone'])->name('dropzone');
+Route::post('dropzoneUnlink', [CategoryController::class, 'dropzoneUnlink'])->name('dropzoneUnlink');

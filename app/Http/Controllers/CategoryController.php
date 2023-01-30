@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 use function PHPUnit\Framework\isEmpty;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -41,13 +43,17 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $category = new Category();
-
+        foreach ($request->input('document', []) as $file) {
+            Storage::disk('local')->move('tmp/uploads/'. $file, 'public/'. $file);
+        }
         $category->create([
             'name' => $request->input('name'),
             'slug' => Str::slug($request->input('name')),
             'parent_id' => $request->input('parent_id'),
             'status' => $request->input('status') ? 1 : 0,
         ]);
+
+        
 
         return redirect()->route('categories.index')->with('success', 'Create Category Successfully!');
     }
@@ -122,5 +128,32 @@ class CategoryController extends Controller
         $message = array('message' => 'Success!', 'name' => $category->name);
 
         return response()->json($message);
+    }
+
+    public function dropzone(Request $request)
+    {
+        $path = storage_path('app/tmp/uploads');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $file = $request->file('file');
+
+        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+
+        $file->move($path, $name);
+
+        return response()->json([
+            'name'          => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
+    }
+
+    public function dropzoneUnlink(Request $request)
+    {
+        Storage::disk('local')->deleteDirectory('tmp/uploads');
+
+        return response()->json(['success' => $request->name]);
     }
 }
