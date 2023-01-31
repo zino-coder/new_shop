@@ -71,13 +71,6 @@
     @include('admin.components.modal-delete')
 @endsection
 
-@push('link-scripts')
-    <!-- bs-custom-file-input -->
-    <script src="{{ asset('adminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <!-- Select2 -->
-    <script src="{{ asset('adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
-@endpush
-
 @push('custom-scripts')
     <script>
         //Initialize Select2 Elements
@@ -98,7 +91,11 @@
                 dataType: "json",
                 success:function(data){
                     console.log(data)
-                    toastr.success('Change status for ' + data.name + ' successfully!', 'Update')
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Update status',
+                        html: `Update status for ${data.status} successfully!`,
+                    })
                 }
             })
         })
@@ -108,10 +105,4 @@
             $('#deleteModal').find('form').attr('action', href);
         })
     </script>
-@endpush
-
-@push('link-styles')
-    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush

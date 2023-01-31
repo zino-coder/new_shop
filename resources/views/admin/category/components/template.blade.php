@@ -1,9 +1,3 @@
-@if(Session::has('success'))
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        {{ Session::get('success') }}
-    </div>
-@endif
 <div class="card card-primary">
     <div class="card-header">
         <h3 class="card-title">{{ isset($method) ? 'Edit Category' : 'Add New Category' }}</h3>

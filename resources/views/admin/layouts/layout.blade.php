@@ -15,8 +15,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-    <!-- Toastr -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+    <!-- dropzonejs -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/dropzone/min/dropzone.min.css') }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
     @stack('link-styles')
     @stack('custom-styles')
@@ -40,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
     </style>
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini dark-mode">
 <div id="loading">
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>
@@ -81,13 +88,43 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('adminLTE/dist/js/adminlte.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="{{ asset('adminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<!-- dropzonejs -->
+<script src="{{ asset('adminLTE/plugins/dropzone/min/dropzone.min.js') }}"></script>
+<!-- bs-custom-file-input -->
+<script src="{{ asset('adminLTE/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<!-- Select2 -->
+<script src="{{ asset('adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- CKEditor -->
+<script src="{{ asset('lib/ckeditor5/ckeditor.js')}}"></script>
+<!-- TinyMCE -->
+<script src="{{ asset('lib/tinymce/tinymce.min.js') }}"></script>
 
 @stack('link-scripts')
 <script>
-    toastr.options.closeButton = true;
-    toastr.options.showEasing = 'linear';
-    toastr.options.progressBar = true;
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 10000,
+        showCloseButton: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    @if(Session::has('success'))
+    $(document).ready(function () {
+        Toast.fire({
+            icon: 'success',
+            title: 'Update status',
+            html: '{{ Session::get('success') }}',
+        })
+    })
+    @endif
 </script>
 @stack('custom-scripts')
 </body>
