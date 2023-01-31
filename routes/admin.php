@@ -20,6 +20,10 @@ Route::get('/', function () {
    return view('admin.home.index');
 });
 
+Route::get('/login', function () {
+    return view('admin.auth.login');
+})->name('admin.login');
+
 Route::name('categories.')->prefix('categories')->group(function () {
     Route::post('change-status', [CategoryController::class, 'changeStatus'])->name('changeStatus');
     Route::get('/', [CategoryController::class, 'index'])->name('index');

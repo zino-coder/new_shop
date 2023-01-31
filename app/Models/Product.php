@@ -29,7 +29,7 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function featureImage()
+    public function featuredImage()
     {
         return $this->morphOne(Media::class, 'mediable')->where('type', 'featured');
     }

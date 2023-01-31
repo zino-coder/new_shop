@@ -47,7 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
     </style>
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini dark-mode">
 <div id="loading">
     <div class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>

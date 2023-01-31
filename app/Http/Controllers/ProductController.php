@@ -7,6 +7,7 @@ use App\Models\Media;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,8 +43,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = new Product();
-
         $product = Product::create([
             'name' => $request->input('name'),
             'slug' => Str::slug($request->input('name')),
@@ -51,7 +50,8 @@ class ProductController extends Controller
             'brand_id' => $request->input('brand_id') ?? null,
             'amount' => $request->input('amount') ?? 0,
             'regular_price' => $request->input('regular_price'),
-            'sale_price' => $request->input('sale_type') == 'percent' ? $request->input('regular_price') * (100 - $request->input('sale_price')) : $request->input('sale_price'),
+            'sale_price' => $request->input('sale_price'),
+            'sale_percent' => $request->input('sale_percent'),
             'status' => $request->input('status') ? 1 : 0,
             'is_hot' => $request->input('is_hot') ? 1 : 0,
             'is_featured' => $request->input('is_featured') ? 1 : 0,
@@ -120,7 +120,63 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::where('id', $id)->first();
+
+        $product->update([
+            'name' => $request->input('name'),
+            'slug' => Str::slug($request->input('name')),
+            'category_id' => $request->input('category_id'),
+            'brand_id' => $request->input('brand_id') ?? null,
+            'amount' => $request->input('amount') ?? 0,
+            'regular_price' => $request->input('regular_price'),
+            'sale_price' => $request->input('sale_price'),
+            'sale_percent' => $request->input('sale_percent'),
+            'status' => $request->input('status') ? 1 : 0,
+            'is_hot' => $request->input('is_hot') ? 1 : 0,
+            'is_featured' => $request->input('is_featured') ? 1 : 0,
+            'description' => $request->input('description'),
+            'content' => $request->input('content'),
+        ]);
+
+        if ($request->hasFile('featured_image')) {
+            Storage::disk('local')->delete('public/uploads/featured/'. $product->featuredImage->name);
+            $faeturedImage = $request->file('featured_image');
+
+            $nameFile = uniqid() . '_' . trim($faeturedImage->getClientOriginalName());
+            $faeturedImage->storeAs('public/uploads/featured', $nameFile);
+
+            $media = Media::where('mediable_id', $product->id)
+                ->where('mediable_type', Product::class)
+                ->where('type', 'featured')
+                ->first();
+
+            $media->update([
+                'name' => $nameFile
+            ]);
+        }
+
+        $thumbs = $product->thumbImages->pluck('name')->toArray();
+
+        foreach ($request->document as $document) {
+            if (!in_array($document, $thumbs)) {
+                moveImageToFolder($document, 'thumb');
+                Media::create([
+                    'mediable_type' => Product::class,
+                    'mediable_id'=> $product->id,
+                    'name' => $document,
+                    'type' => 'thumb',
+                ]);
+            }
+        }
+
+        foreach ($thumbs as $thumb) {
+            if (!in_array($thumb, $request->document)) {
+                Storage::disk('local')->delete('public/uploads/thumb/'. $product->featuredImage->name);
+                Media::where('name', $thumb)->delete();
+            }
+        }
+
+        return redirect()->route('products.index')->with('success', 'Update Product Successfully!');
     }
 
     /**
