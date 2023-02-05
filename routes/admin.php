@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DropzoneController;
+use App\Http\Controllers\Auth\Admin\LoginController;
+use App\Http\Controllers\Auth\Admin\LogoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,31 +20,35 @@ use App\Http\Controllers\DropzoneController;
 
 Route::get('/', function () {
    return view('admin.home.index');
-});
+})->name('admin.home');
 
-Route::get('/login', function () {
-    return view('admin.auth.login');
-})->name('admin.login');
+Route::get('/login', [LoginController::class, 'getLoginForm'])->name('admin.login');
 
-Route::name('categories.')->prefix('categories')->group(function () {
-    Route::post('change-status', [CategoryController::class, 'changeStatus'])->name('changeStatus');
-    Route::get('/', [CategoryController::class, 'index'])->name('index');
-    Route::post('/', [CategoryController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [CategoryController::class, 'update'])->name('update');
-    Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
-});
+Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('admin.authenticate');
 
-Route::name('products.')->prefix('products')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('index');
-    Route::get('/create', [ProductController::class, 'create'])->name('create');
-    Route::post('/', [ProductController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [ProductController::class, 'update'])->name('update');
-    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('destroy');
-});
+Route::get('logout', [LogoutController::class, 'logout'])->name('admin.logout');
+
+Route::middleware('auth:admin')->group(function () {
+    Route::name('categories.')->prefix('categories')->group(function () {
+        Route::post('change-status', [CategoryController::class, 'changeStatus'])->name('changeStatus');
+        Route::get('/', [CategoryController::class, 'index'])->name('index');
+        Route::post('/', [CategoryController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::name('products.')->prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::post('/', [ProductController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ProductController::class, 'destroy'])->name('destroy');
+    });
 
 //DropzoneJS
-Route::prefix('dropzone')->name('dropzone.')->group(function () {
-    Route::post('/upload', [DropzoneController::class, 'upload'])->name('upload');
+    Route::prefix('dropzone')->name('dropzone.')->group(function () {
+        Route::post('/upload', [DropzoneController::class, 'upload'])->name('upload');
+    });
 });

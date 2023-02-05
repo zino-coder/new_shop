@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 </head>
 <body class="hold-transition login-page dark-mode">
 <style>
@@ -29,10 +31,10 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>
-
-            <form action="../../index3.html" method="post">
+            <form action="{{ route('admin.authenticate') }}" method="post">
+                @csrf
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Username">
+                    <input type="text" class="form-control" placeholder="Username" name="username">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -40,7 +42,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="password" class="form-control" placeholder="Password"name="password">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -90,5 +92,30 @@
 <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('adminLTE/dist/js/adminlte.min.js') }}"></script>
+<!-- SweetAlert2 -->
+<script src="{{ asset('adminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script type="text/javascript">
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 10000,
+        showCloseButton: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+</script>
+@error('email')
+<script type="text/javascript">
+    Toast.fire({
+        icon: 'error',
+        title: 'Update status',
+        html: `Wrong email or password!`,
+    })
+</script>
+@enderror
 </body>
 </html>
