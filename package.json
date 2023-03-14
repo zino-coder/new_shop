@@ -10,5 +10,10 @@
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "filepond": "^4.30.4",
+        "filepond-plugin-image-preview": "^4.6.11",
+        "jquery-filepond": "^1.0.0"
     }
 }

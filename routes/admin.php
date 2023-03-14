@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DropzoneController;
 use App\Http\Controllers\Auth\Admin\LoginController;
 use App\Http\Controllers\Auth\Admin\LogoutController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,16 @@ Route::middleware('auth:admin')->group(function () {
         Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
         Route::put('/{id}', [ProductController::class, 'update'])->name('update');
         Route::delete('/{id}', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::name('accounts.')->prefix('accounts')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('/create', [AdminController::class, 'create'])->name('create');
+        Route::post('/', [AdminController::class, 'store'])->name('store');
+        Route::get('/{uuid}', [AdminController::class, 'show'])->name('show');
+        Route::get('/{uuid}/edit', [AdminController::class, 'edit'])->name('edit');
+        Route::put('/{uuid}', [AdminController::class, 'update'])->name('update');
+        Route::delete('/{uuid}', [AdminController::class, 'destroy'])->name('destroy');
     });
 
 //DropzoneJS

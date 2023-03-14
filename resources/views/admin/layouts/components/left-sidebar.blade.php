@@ -79,6 +79,27 @@
                         <p>Order</p>
                     </a>
                 </li>
+                <li class="nav-item{{ Route::is('accounts.*') ? ' menu-open' : '' }}">
+                    <a href="{{ route('accounts.index') }}" class="nav-link{{ Route::is('accounts.*') ? ' active' : '' }}">
+                        <i class="nav-icon fas fa-user-shield"></i>
+                        <p>Admins</p>
+                        <i class="fas fa-angle-left right"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('accounts.index') }}" class="nav-link {{ Route::is('accounts.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>All Accounts</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('accounts.create') }}" class="nav-link {{ Route::is('accounts.create') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-puzzle-piece"></i>
+                                <p>Add New Account</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>

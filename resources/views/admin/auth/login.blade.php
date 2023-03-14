@@ -108,14 +108,23 @@
         }
     })
 </script>
-@error('email')
+@error('login')
 <script type="text/javascript">
     Toast.fire({
         icon: 'error',
-        title: 'Update status',
-        html: `Wrong email or password!`,
+        title: 'Login Failed!',
+        html: `{{ $message }}`,
     })
 </script>
 @enderror
+@if(Session::has('success'))
+    <script type="text/javascript">
+        Toast.fire({
+            icon: 'success',
+            title: 'Logout Success!',
+            html: `{{ Session::get('success') }}`,
+        })
+    </script>
+@endif
 </body>
 </html>

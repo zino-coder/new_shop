@@ -63,7 +63,7 @@ class ProductController extends Controller
             $faeturedImage = $request->file('featured_image');
 
             $nameFile = uniqid() . '_' . trim($faeturedImage->getClientOriginalName());
-            $faeturedImage->storeAs('public/featured', $nameFile);
+            $faeturedImage->storeAs('public/uploads/featured', $nameFile);
 
             Media::create([
                 'mediable_type' => Product::class,
@@ -73,14 +73,16 @@ class ProductController extends Controller
             ]);
         }
 
-        foreach ($request->document as $document) {
-            moveImageToFolder($document, 'thumb');
-            Media::create([
-                'mediable_type' => Product::class,
-                'mediable_id'=> $product->id,
-                'name' => $document,
-                'type' => 'thumb',
-            ]);
+        if ($request->document) {
+            foreach ($request->document as $document) {
+                moveImageToFolder($document, 'thumb');
+                Media::create([
+                    'mediable_type' => Product::class,
+                    'mediable_id'=> $product->id,
+                    'name' => $document,
+                    'type' => 'thumb',
+                ]);
+            }
         }
 
         return redirect()->route('products.index')->with('success', 'Create Product Successfully!');
@@ -139,7 +141,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('featured_image')) {
-            Storage::disk('local')->delete('public/uploads/featured/'. $product->featuredImage->name);
+            Storage::disk('local')->delete('public/uploads/featured/'. $product->featuredImage?->name);
             $faeturedImage = $request->file('featured_image');
 
             $nameFile = uniqid() . '_' . trim($faeturedImage->getClientOriginalName());
@@ -149,30 +151,31 @@ class ProductController extends Controller
                 ->where('mediable_type', Product::class)
                 ->where('type', 'featured')
                 ->first();
-
             $media->update([
                 'name' => $nameFile
             ]);
         }
 
-        $thumbs = $product->thumbImages->pluck('name')->toArray();
+        if (is_array($request->document)) {
+            $thumbs = $product->thumbImages->pluck('name')->toArray();
 
-        foreach ($request->document as $document) {
-            if (!in_array($document, $thumbs)) {
-                moveImageToFolder($document, 'thumb');
-                Media::create([
-                    'mediable_type' => Product::class,
-                    'mediable_id'=> $product->id,
-                    'name' => $document,
-                    'type' => 'thumb',
-                ]);
+            foreach ($request->document as $document) {
+                if (!in_array($document, $thumbs)) {
+                    moveImageToFolder($document, 'thumb');
+                    Media::create([
+                        'mediable_type' => Product::class,
+                        'mediable_id'=> $product->id,
+                        'name' => $document,
+                        'type' => 'thumb',
+                    ]);
+                }
             }
-        }
 
-        foreach ($thumbs as $thumb) {
-            if (!in_array($thumb, $request->document)) {
-                Storage::disk('local')->delete('public/uploads/thumb/'. $product->featuredImage->name);
-                Media::where('name', $thumb)->delete();
+            foreach ($thumbs as $thumb) {
+                if (!in_array($thumb, $request->document)) {
+                    Storage::disk('local')->delete('public/uploads/thumb/'. $product->featuredImage->name);
+                    Media::where('name', $thumb)->delete();
+                }
             }
         }
 

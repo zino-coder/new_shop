@@ -31,14 +31,23 @@ class LoginController extends Controller
             'password' => $request->input('password'),
         ];
 
-        if (Auth::guard('admin')->attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return redirect()->route('admin.home');
+        if (!Auth::guard('admin')->attempt($credentials)) {
+            return back()->withErrors([
+                'login' => 'Wrong username or password!',
+            ])->onlyInput('email');
         }
 
-        return back()->withErrors([
-            'email' => 'Wrong username or password!',
-        ])->onlyInput('email');
+        Auth::guard('admin')->attempt($credentials);
+        $user = Auth::guard('admin')->user();
+
+        if ($user->status == false) {
+            return back()->withErrors([
+                'login' => 'Your account is not active',
+            ])->onlyInput('email');
+        }
+
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.home')->with('success', 'Login Successfully!');
     }
 }
