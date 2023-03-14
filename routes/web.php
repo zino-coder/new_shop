@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::prefix('/admin')->group(__DIR__.'/admin.php');
+
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('add-to-cart.html', [\App\Http\Controllers\CartController::class, 'add'])->name('addToCart');
+Route::get('info', [\App\Http\Controllers\CartController::class, 'index']);
+Route::get('cart.html', [\App\Http\Controllers\CartController::class, 'index'])->name('cart');
+Route::get('checkout.html', [\App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
+Route::get('/{product_slug}.html', [\App\Http\Controllers\HomeController::class, 'productDetail'])->name('product_detail');
